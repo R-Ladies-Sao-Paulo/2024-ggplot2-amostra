@@ -202,15 +202,20 @@ knitr::include_graphics("img/maonamassa.png")
 
 Primeiro, precisamos instalar os pacotes necessários e carregá-los:
 
+  - Pacote `{dados}` para a importação do dataset.
+
   - Pacote `{dplyr}` para manuseio dos dados.
   
   - Pacote `{ggplot2}` para a visualização dos dados.
+
   
 ```{r}
 #| echo: true
+# install.packages('dados')
 # install.packages('dplyr')
 # install.packages('ggplot2')
 
+library(dados)
 library(ggplot2)
 library(dplyr)
 ```
