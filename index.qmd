@@ -207,7 +207,6 @@ Primeiro, precisamos instalar os pacotes necessários e carregá-los:
   - Pacote `{dplyr}` para manuseio dos dados.
   
   - Pacote `{ggplot2}` para a visualização dos dados.
-
   
 ```{r}
 #| echo: true
@@ -227,12 +226,12 @@ library(dplyr)
 
 - Na maioria das vezes precisaremos organizar e limpar os dados antes de utilizar o ggplot. Aqui vamos partir de uma base já organizada.
 
-- Para a parte prática, utilizaremos a base do R *airquality*.
+- Para a parte prática, utilizaremos a base do R traduzida *pinguins*.
 
 ```{r}
 # Leitura da base de dados
-airquality <- as_tibble(datasets::airquality)
-head(airquality)
+pinguins <- as_tibble(dados::pinguins)
+head(pinguins)
 ```
 
 
@@ -240,10 +239,12 @@ head(airquality)
 
 ### Mapear as variáveis
 
-As variáveis escolhidas para a minha análise são: **Wind** e **Temp**.
+Pinguins com nadadeiras mais compridas pesam mais ou menos que pinguins com nadadeiras curtas?
+
+As variáveis escolhidas para a minha análise são: **comprimento_nadadeira** e **massa_corporal**.
 
 ```{r}
-select(airquality, Wind, Temp)
+select(pinguins, comprimento_nadadeira, massa_corporal)
 ```
 
 
@@ -251,31 +252,31 @@ select(airquality, Wind, Temp)
 
 ### Definir objeto geométrico
 
-Como as variáveis **Wind** e **Temp** são numéricas, vamos fazer um gráfico de pontos, chamando a camada `geom_point()`.
+Como as variáveis **comprimento_nadadeira** e **massa_corporal** são numéricas, vamos fazer um gráfico de pontos, chamando a camada `geom_point()`.
 
 
 
 ## Mão na massa
 
-1. **Base de dados**: airquality.
+1. **Base de dados**: pinguins.
 
-2. **Mapear as variáveis**: Wind (x) e Temp (y).
+2. **Mapear as variáveis**: comprimento_nadadeira (x) e massa_corporal (y).
   
 3. **Objeto geométrico**: pontos (`geom_point()`).
 
 
 
 ```{r, echo=TRUE, fig.show="hide", collapse=T, out.width="80%"}
-ggplot(data = airquality,
-       mapping = aes(x = Wind, y = Temp)) +
+ggplot(data = pinguins,
+       mapping = aes(x = comprimento_nadadeira, y = massa_corporal)) +
   geom_point() # Camada 1
 ```
 
 ## Mão na massa
 
 ```{r, eval=TRUE, echo=FALSE, collapse=T, out.width="55%"}
-ggplot(data = airquality,
-       mapping = aes(x = Wind, y = Temp)) +
+ggplot(data = pinguins,
+       mapping = aes(x = comprimento_nadadeira, y = massa_corporal)) +
   geom_point()
 ```
 
@@ -285,8 +286,8 @@ ggplot(data = airquality,
 O mapeamento das variáveis também pode ser inserido no objeto geométrico:
 
 ```{r, echo=TRUE, collapse=T, out.width="45%"}
-ggplot(data = airquality) +
-  geom_point(mapping = aes(x = Wind, y = Temp))
+ggplot(data = pinguins) +
+  geom_point(mapping = aes(x = comprimento_nadadeira, y = massa_corporal))
 ```
 
 
@@ -323,9 +324,9 @@ knitr::include_graphics("img/horst/ggplot2_obra_prima_pt.png")
 - Tamanho dos pontos `geom_point(size = valor numérico)`
 
 ```{r, eval=FALSE, echo=TRUE, collapse=T, out.width="40%"}
-ggplot(data = airquality,
-       mapping = aes(x = Wind, y = Temp)) +
-  geom_point(color = "blue", size = 4)  # Camada 1
+ggplot(data = pinguins,
+       mapping = aes(x = comprimento_nadadeira, y = massa_corporal)) +
+  geom_point(color = "purple", size = 4)  # Camada 1
 ```
 
 
@@ -335,9 +336,9 @@ ggplot(data = airquality,
 ### Cores e tamanhos dos objetos geométricos
 
 ```{r, eval=TRUE, echo=FALSE, collapse=T, out.width="50%"}
-ggplot(data = airquality,
-       mapping = aes(x = Wind, y = Temp)) +
-  geom_point(color = "blue", size = 4)  # Camada 1
+ggplot(data = pinguins,
+       mapping = aes(x = comprimento_nadadeira, y = massa_corporal)) +
+  geom_point(color = "purple", size = 4)  # Camada 1
 ```
  
 
@@ -348,22 +349,12 @@ ggplot(data = airquality,
 - Caso 2: associados a uma terceira variável: `aes()` (mapeamento das variáveis)
 - Dentro do objeto geométrico (`geom_point()`)
 - Cor: `geom_point(color = variável)`
-- Tamanho dos pontos `geom_point(size = variável)`
 
-Vou associar a cor à variável **Month** (numérico de 5 a 9)
+Vou associar a cor à variável **espécies** (Pinguim-de-adélia, Pinguim-gentoo e Pinguim-de-barbicha)
 
 ```{r, eval=FALSE, echo=TRUE, collapse=T, out.width="50%"}
-ggplot(data = airquality) +
-  geom_point(mapping = aes(x = Wind, y = Temp, color = factor(Month)), size = 2)  # Camada 1
-```
-
-## Mão na massa
-
-### Cores e tamanhos dos objetos geométricos
-
-```{r, eval=TRUE, echo=FALSE, collapse=T, out.width="50%"}
-ggplot(data = airquality) +
-  geom_point(mapping = aes(x = Wind, y = Temp, color = factor(Month)), size = 2)   # Camada 1
+ggplot(data = pinguins) +
+  geom_point(mapping = aes(x = comprimento_nadadeira, y = massa_corporal, color = especie))  # Camada 1
 ```
 
 
@@ -372,19 +363,10 @@ ggplot(data = airquality) +
 ### Cores e tamanhos dos objetos geométricos
 
 ```{r, eval=TRUE, echo=FALSE, collapse=T, out.width="50%"}
-ggplot(data = airquality) +
-  geom_point(mapping = aes(x = Wind, y = Temp, size = factor(Month), color = factor(Month)))  # Camada 1
+ggplot(data = pinguins) +
+  geom_point(mapping = aes(x = comprimento_nadadeira, y = massa_corporal, color = especie))  # Camada 1
 ```
- 
 
-## Mão na massa
-
-### Cores e tamanhos dos objetos geométricos
-
-```{r, eval=FALSE, echo=TRUE, collapse=T, out.width="50%"}
-ggplot(data = airquality) +
-  geom_point(mapping = aes(x = Wind, y = Temp, size = factor(Month), color = factor(Month)))  # Camada 1
-```
 
 
 ## Mão na massa
@@ -394,9 +376,10 @@ ggplot(data = airquality) +
 - Nova camada: `ggtitle("Titulo", "subtítulo")`.
 
 ```{r, eval=FALSE, echo=TRUE, collapse=T, out.width="40%"}
-ggplot(data = airquality) +
-  geom_point(mapping = aes(x = Wind, y = Temp, size = factor(Month), color = factor(Month))) + # Camada 1
-  ggtitle("Qualidade do ar", "Temperatura pelo Vento")  # Camada 2
+ggplot(data = pinguins) +
+  geom_point(mapping = aes(x = comprimento_nadadeira, y = massa_corporal, color = especie)) + # Camada 1
+  ggtitle("Massa corporal e comprimento de nadadeira", 
+          "Pinguim-de-adélia, Pinguim-gentoo e Pinguim-de-barbicha") # Camada 2
 ```
 
  
@@ -406,9 +389,10 @@ ggplot(data = airquality) +
 ### Títulos e subtítulos
 
 ```{r, eval=TRUE, echo=FALSE, collapse=T, out.width="50%"}
-ggplot(data = airquality) +
-  geom_point(mapping = aes(x = Wind, y = Temp, size = factor(Month), color = factor(Month))) + # Camada 1
-  ggtitle("Qualidade do ar", "Temperatura pelo Vento")  # Camada 2
+ggplot(data = pinguins) +
+  geom_point(mapping = aes(x = comprimento_nadadeira, y = massa_corporal, color = especie)) + # Camada 1
+  ggtitle("Massa corporal e comprimento de nadadeira", 
+          "Pinguim-de-adélia, Pinguim-gentoo e Pinguim-de-barbicha") # Camada 2
 ```
 
 
@@ -420,10 +404,12 @@ ggplot(data = airquality) +
 - Nova camada: `labs(x = "nome no eixo x", y = "nome no eixo y")`.
 
 ```{r, eval=FALSE, echo=TRUE, collapse=T, out.width="40%"}
-ggplot(data = airquality) +
-  geom_point(mapping = aes(x = Wind, y = Temp, size = factor(Month), color = factor(Month))) + # Camada 1
-  ggtitle("Qualidade do ar", "Temperatura pelo Vento") +  # Camada 2
-  labs(x = "Vento (Km/h)", y = "Temperatura (Farenheit)") # Camada 3
+ggplot(data = pinguins) +
+  geom_point(mapping = aes(x = comprimento_nadadeira, y = massa_corporal, color = especie)) + # Camada 1
+  ggtitle("Massa corporal e comprimento de nadadeira", 
+          "Pinguim-de-adélia, Pinguim-gentoo e Pinguim-de-barbicha") + # Camada 2
+  labs(x = "Comprimento da nadadeira (mm)", 
+       y = "Massa coporal (g)") # Camada 3
 ```
 
 ## Mão na massa
@@ -431,10 +417,12 @@ ggplot(data = airquality) +
 ### Eixos
 
 ```{r, eval=TRUE, echo=FALSE, collapse=T, out.width="50%"}
-ggplot(data = airquality) +
-  geom_point(mapping = aes(x = Wind, y = Temp, size = factor(Month), color = factor(Month))) + # Camada 1
-  ggtitle("Qualidade do ar", "Temperatura pelo Vento") +  # Camada 2
-  labs(x = "Vento (Km/h)", y = "Temperatura (Farenheit)") # Camada 3
+ggplot(data = pinguins) +
+  geom_point(mapping = aes(x = comprimento_nadadeira, y = massa_corporal, color = especie)) + # Camada 1
+  ggtitle("Massa corporal e comprimento de nadadeira", 
+          "Pinguim-de-adélia, Pinguim-gentoo e Pinguim-de-barbicha") + # Camada 2
+  labs(x = "Comprimento da nadadeira (mm)", 
+       y = "Massa coporal (g)") # Camada 3
 ```
 
 
@@ -445,12 +433,14 @@ ggplot(data = airquality) +
 - Alterar limites das coordenadas: `xlim(c(a,b))` e `ylim(c(a,b))`.
 
 ```{r, eval=FALSE, echo=TRUE, collapse=T, out.width="40%"}
-ggplot(data = airquality) +
-  geom_point(mapping = aes(x = Wind, y = Temp, size = factor(Month), color = factor(Month))) + # Camada 1
-  ggtitle("Qualidade do ar", "Temperatura pelo Vento") +  # Camada 2
-  labs(x = "Vento (Km/h)", y = "Temperatura (Farenheit)") + # Camada 3
-  xlim(c(0,30)) + # Camada 4
-  ylim(c(50,150)) # Camada 5
+ggplot(data = pinguins) +
+  geom_point(mapping = aes(x = comprimento_nadadeira, y = massa_corporal, color = especie)) + # Camada 1
+  ggtitle("Massa corporal e comprimento de nadadeira", 
+          "Pinguim-de-adélia, Pinguim-gentoo e Pinguim-de-barbicha") + # Camada 2
+  labs(x = "Comprimento da nadadeira (mm)", 
+       y = "Massa coporal (g)") + # Camada 3
+  xlim(c(170,240)) + # Camada 4
+  ylim(c(2700,6300)) # Camada 5
 ```
 
 
@@ -459,12 +449,14 @@ ggplot(data = airquality) +
 ### Eixos
 
 ```{r, eval=TRUE, echo=FALSE, collapse=T, out.width="50%"}
-ggplot(data = airquality) +
-  geom_point(mapping = aes(x = Wind, y = Temp, size = factor(Month), color = factor(Month))) + # Camada 1
-  ggtitle("Qualidade do ar", "Temperatura pelo Vento") +  # Camada 2
-  labs(x = "Vento (Km/h)", y = "Temperatura (Farenheit)") + # Camada 3
-  xlim(c(0,30)) + # Camada 4
-  ylim(c(50,150)) # Camada 5
+ggplot(data = pinguins) +
+  geom_point(mapping = aes(x = comprimento_nadadeira, y = massa_corporal, color = especie)) + # Camada 1
+  ggtitle("Massa corporal e comprimento de nadadeira", 
+          "Pinguim-de-adélia, Pinguim-gentoo e Pinguim-de-barbicha") + # Camada 2
+  labs(x = "Comprimento da nadadeira (mm)", 
+       y = "Massa coporal (g)") + # Camada 3
+  xlim(c(170,240)) + # Camada 4
+  ylim(c(2700,6300)) # Camada 5
 ```
 
 
@@ -472,15 +464,17 @@ ggplot(data = airquality) +
 
 ### Legenda
 
-- Nova camana: `guides()`.
-- Associar com o tipo de representação: cor
+- Nova camada: `guides()`.
+- Associar com o tipo de representação: cor.
 
 ```{r, eval=FALSE, echo=TRUE, collapse=T, out.width="40%"}
-ggplot(data = airquality) +
-  geom_point(mapping = aes(x = Wind, y = Temp, color = factor(Month)), size = 3) + # Camada 1
-  ggtitle("Qualidade do ar", "Temperatura pelo Vento") +  # Camada 2
-  labs(x = "Vento (Km/h)", y = "Temperatura (Farenheit)") + # Camada 3
-  guides(color=guide_legend(title="Mês")) # Camada 3
+ggplot(data = pinguins) +
+  geom_point(mapping = aes(x = comprimento_nadadeira, y = massa_corporal, color = especie)) + # Camada 1
+  ggtitle("Massa corporal e comprimento de nadadeira", 
+          "Pinguim-de-adélia, Pinguim-gentoo e Pinguim-de-barbicha") + # Camada 2
+  labs(x = "Comprimento da nadadeira (mm)", 
+       y = "Massa coporal (g)") + # Camada 3
+  guides(color=guide_legend(title="Espécies")) # Camada 4
 ```
 
  
@@ -490,11 +484,13 @@ ggplot(data = airquality) +
 ### Legenda
 
 ```{r, eval=TRUE, echo=FALSE, collapse=T, out.width="50%"}
-ggplot(data = airquality) +
-  geom_point(mapping = aes(x = Wind, y = Temp, color = factor(Month)), size = 3) + # Camada 1
-  ggtitle("Qualidade do ar", "Temperatura pelo Vento") +  # Camada 2
-  labs(x = "Vento (Km/h)", y = "Temperatura (Farenheit)") + # Camada 3
-  guides(color=guide_legend(title="Mês")) # Camada 3
+ggplot(data = pinguins) +
+  geom_point(mapping = aes(x = comprimento_nadadeira, y = massa_corporal, color = especie)) + # Camada 1
+  ggtitle("Massa corporal e comprimento de nadadeira", 
+          "Pinguim-de-adélia, Pinguim-gentoo e Pinguim-de-barbicha") + # Camada 2
+  labs(x = "Comprimento da nadadeira (mm)", 
+       y = "Massa coporal (g)") + # Camada 3
+  guides(color=guide_legend(title="Espécies")) # Camada 4
 ```
 
  
@@ -509,12 +505,14 @@ ggplot(data = airquality) +
 *Tema clássico*
 
 ```{r, eval=FALSE, echo=TRUE, collapse=T, out.width="40%"}
-ggplot(data = airquality) +
-  geom_point(mapping = aes(x = Wind, y = Temp, color = factor(Month)), size = 3) + # Camada 1
-  ggtitle("Qualidade do ar", "Temperatura pelo Vento") +  # Camada 2
-  labs(x = "Vento (Km/h)", y = "Temperatura (Farenheit)") + # Camada 3
-  guides(color=guide_legend(title="Mês")) + # Camada 3
-  theme_classic()  # Camada 4
+ggplot(data = pinguins) +
+  geom_point(mapping = aes(x = comprimento_nadadeira, y = massa_corporal, color = especie)) + # Camada 1
+  ggtitle("Massa corporal e comprimento de nadadeira", 
+          "Pinguim-de-adélia, Pinguim-gentoo e Pinguim-de-barbicha") + # Camada 2
+  labs(x = "Comprimento da nadadeira (mm)", 
+       y = "Massa coporal (g)") + # Camada 3
+  guides(color=guide_legend(title="Espécies")) + # Camada 4
+  theme_classic()  # Camada 5
 ```
 
 
@@ -524,12 +522,14 @@ ggplot(data = airquality) +
 ### Temas | Clássico
 
 ```{r, eval=TRUE, echo=FALSE, collapse=T, out.width="50%"}
-ggplot(data = airquality) +
-  geom_point(mapping = aes(x = Wind, y = Temp, color = factor(Month)), size = 3) + # Camada 1
-  ggtitle("Qualidade do ar", "Temperatura pelo Vento") +  # Camada 2
-  labs(x = "Vento (Km/h)", y = "Temperatura (Farenheit)") + # Camada 3
-  guides(color=guide_legend(title="Mês")) + # Camada 3
-  theme_classic()  # Camada 4
+ggplot(data = pinguins) +
+  geom_point(mapping = aes(x = comprimento_nadadeira, y = massa_corporal, color = especie)) + # Camada 1
+  ggtitle("Massa corporal e comprimento de nadadeira", 
+          "Pinguim-de-adélia, Pinguim-gentoo e Pinguim-de-barbicha") + # Camada 2
+  labs(x = "Comprimento da nadadeira (mm)", 
+       y = "Massa coporal (g)") + # Camada 3
+  guides(color=guide_legend(title="Espécies")) + # Camada 4
+  theme_classic()  # Camada 5
 ```
 
 
@@ -539,12 +539,14 @@ ggplot(data = airquality) +
 ### Temas | Clássico / Tamanho da fonte
 
 ```{r, eval=FALSE, echo=TRUE, collapse=T, out.width="40%"}
-ggplot(data = airquality) +
-  geom_point(mapping = aes(x = Wind, y = Temp, color = factor(Month)), size = 3) + # Camada 1
-  ggtitle("Qualidade do ar", "Temperatura pelo Vento") +  # Camada 2
-  labs(x = "Vento (Km/h)", y = "Temperatura (Farenheit)") + # Camada 3
-  guides(color=guide_legend(title="Mês")) + # Camada 3
-  theme_classic(16)  # Camada 4
+ggplot(data = pinguins) +
+  geom_point(mapping = aes(x = comprimento_nadadeira, y = massa_corporal, color = especie)) + # Camada 1
+  ggtitle("Massa corporal e comprimento de nadadeira", 
+          "Pinguim-de-adélia, Pinguim-gentoo e Pinguim-de-barbicha") + # Camada 2
+  labs(x = "Comprimento da nadadeira (mm)", 
+       y = "Massa coporal (g)") + # Camada 3
+  guides(color=guide_legend(title="Espécies")) + # Camada 4
+  theme_classic()  # Camada 5
 ```
  
 
@@ -553,12 +555,14 @@ ggplot(data = airquality) +
 ### Temas | Clássico / Tamanho da fonte
 
 ```{r, eval=TRUE, echo=FALSE, collapse=T, out.width="50%"}
-ggplot(data = airquality) +
-  geom_point(mapping = aes(x = Wind, y = Temp, color = factor(Month)), size = 3) + # Camada 1
-  ggtitle("Qualidade do ar", "Temperatura pelo Vento") +  # Camada 2
-  labs(x = "Vento (Km/h)", y = "Temperatura (Farenheit)") + # Camada 3
-  guides(color=guide_legend(title="Mês")) + # Camada 3
-  theme_classic(16)  # Camada 4
+ggplot(data = pinguins) +
+  geom_point(mapping = aes(x = comprimento_nadadeira, y = massa_corporal, color = especie)) + # Camada 1
+  ggtitle("Massa corporal e comprimento de nadadeira", 
+          "Pinguim-de-adélia, Pinguim-gentoo e Pinguim-de-barbicha") + # Camada 2
+  labs(x = "Comprimento da nadadeira (mm)", 
+       y = "Massa coporal (g)") + # Camada 3
+  guides(color=guide_legend(title="Espécies")) + # Camada 4
+  theme_classic(16)  # Camada 5
 ```
 
 
@@ -574,12 +578,14 @@ ggplot(data = airquality) +
 *Tema escuro*
 
 ```{r, eval=FALSE, echo=TRUE, collapse=T, out.width="40%"}
-ggplot(data = airquality) +
-  geom_point(mapping = aes(x = Wind, y = Temp, color = factor(Month)), size = 3) + # Camada 1
-  ggtitle("Qualidade do ar", "Temperatura pelo Vento") +  # Camada 2
-  labs(x = "Vento (Km/h)", y = "Temperatura (Farenheit)") + # Camada 3
-  guides(color=guide_legend(title="Mês")) + # Camada 3
-  theme_dark(16)  # Camada 4
+ggplot(data = pinguins) +
+  geom_point(mapping = aes(x = comprimento_nadadeira, y = massa_corporal, color = especie)) + # Camada 1
+  ggtitle("Massa corporal e comprimento de nadadeira", 
+          "Pinguim-de-adélia, Pinguim-gentoo e Pinguim-de-barbicha") + # Camada 2
+  labs(x = "Comprimento da nadadeira (mm)", 
+       y = "Massa coporal (g)") + # Camada 3
+  guides(color=guide_legend(title="Espécies")) + # Camada 4
+  theme_dark(16)  # Camada 5
 ```
 
 
@@ -588,12 +594,14 @@ ggplot(data = airquality) +
 ### Temas | Escuro
 
 ```{r, eval=TRUE, echo=FALSE, collapse=T, out.width="50%"}
-ggplot(data = airquality) +
-  geom_point(mapping = aes(x = Wind, y = Temp, color = factor(Month)), size = 3) + # Camada 1
-  ggtitle("Qualidade do ar", "Temperatura pelo Vento") +  # Camada 2
-  labs(x = "Vento (Km/h)", y = "Temperatura (Farenheit)") + # Camada 3
-  guides(color=guide_legend(title="Mês")) + # Camada 3
-  theme_dark(16)  # Camada 4
+ggplot(data = pinguins) +
+  geom_point(mapping = aes(x = comprimento_nadadeira, y = massa_corporal, color = especie)) + # Camada 1
+  ggtitle("Massa corporal e comprimento de nadadeira", 
+          "Pinguim-de-adélia, Pinguim-gentoo e Pinguim-de-barbicha") + # Camada 2
+  labs(x = "Comprimento da nadadeira (mm)", 
+       y = "Massa coporal (g)") + # Camada 3
+  guides(color=guide_legend(title="Espécies")) + # Camada 4
+  theme_dark(16)  # Camada 5
 ```
 
 
@@ -608,12 +616,14 @@ ggplot(data = airquality) +
 *Tema mínimo*
 
 ```{r, eval=FALSE, echo=TRUE, collapse=T, out.width="40%"}
-ggplot(data = airquality) +
-  geom_point(mapping = aes(x = Wind, y = Temp, color = factor(Month)), size = 3) + # Camada 1
-  ggtitle("Qualidade do ar", "Temperatura pelo Vento") +  # Camada 2
-  labs(x = "Vento (Km/h)", y = "Temperatura (Farenheit)") + # Camada 3
-  guides(color=guide_legend(title="Mês")) + # Camada 3
-  theme_minimal(16)  # Camada 4
+ggplot(data = pinguins) +
+  geom_point(mapping = aes(x = comprimento_nadadeira, y = massa_corporal, color = especie)) + # Camada 1
+  ggtitle("Massa corporal e comprimento de nadadeira", 
+          "Pinguim-de-adélia, Pinguim-gentoo e Pinguim-de-barbicha") + # Camada 2
+  labs(x = "Comprimento da nadadeira (mm)", 
+       y = "Massa coporal (g)") + # Camada 3
+  guides(color=guide_legend(title="Espécies")) + # Camada 4
+  theme_minimal(16)  # Camada 5
 ```
 
 ## Mão na massa
@@ -621,12 +631,14 @@ ggplot(data = airquality) +
 ### Temas | Mínimo
 
 ```{r, eval=TRUE, echo=FALSE, collapse=T, out.width="50%"}
-ggplot(data = airquality) +
-  geom_point(mapping = aes(x = Wind, y = Temp, color = factor(Month)), size = 3) + # Camada 1
-  ggtitle("Qualidade do ar", "Temperatura pelo Vento") +  # Camada 2
-  labs(x = "Vento (Km/h)", y = "Temperatura (Farenheit)") + # Camada 3
-  guides(color=guide_legend(title="Mês")) + # Camada 3
-  theme_minimal(16)  # Camada 4
+ggplot(data = pinguins) +
+  geom_point(mapping = aes(x = comprimento_nadadeira, y = massa_corporal, color = especie)) + # Camada 1
+  ggtitle("Massa corporal e comprimento de nadadeira", 
+          "Pinguim-de-adélia, Pinguim-gentoo e Pinguim-de-barbicha") + # Camada 2
+  labs(x = "Comprimento da nadadeira (mm)", 
+       y = "Massa coporal (g)") + # Camada 3
+  guides(color=guide_legend(title="Espécies")) + # Camada 4
+  theme_minimal(16)  # Camada 5
 ```
 
 
